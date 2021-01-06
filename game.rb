@@ -1,36 +1,55 @@
+require './users.rb'
+require './questions.rb' 
 class Game
-  attr_writer :life_points
-  
-  @game_on = false
-
   def initialize
     @player1 
     @player2 
-    @life_points = {}
-
-    puts "want to play a game? (y) for yes (n) for no"
-    @play = gets.chomp
-    if @play == "y"
-      puts "so whats your name player 1?"
-      @player1 = gets.chomp
-      puts "what a dumb name, you must be some dumb sack of shit, you must be a real rock in the pond, sunk and stuck with a name like #{@player1}... dumb sack a shit"
-      puts "whats your name player 2?"
-      @player2 = gets.chomp
-      puts "wonderful!"
-      puts "Here have some life points!"
-      @life_points[@player1] = 3
-      @life_points[@player2] = 3
-      puts "#{@player1}:#{@life_points[@player1]} vs #{@player2}:#{@life_points[@player2]}" 
-      @game_on = true
-    else 
-      return puts "see ya later!"
-    end
   end
 
- 
+  def setup
+    puts "whats your name player 1"
+    name1 = gets.chomp
+    @player1 = User.new(name1)
+    puts "hello #{@player1.name}"
+    puts "whats your name player 2"
+    name2 = gets.chomp
+    @player2 = User.new(name2)
+    puts "hello #{@player2.name}"
+    game_play
+  end
 
-  @player = @player1
+  def game_play
+    @turn = 1
+    @player
 
+    while @player1.life_points > 0 || @player2.life_points > 0
+      if @turn.even?
+        @player = @player2
+      else 
+        @player = @player1
+      end
+
+      question_maker
+      puts "its #{@player.name}s turn!!!!!"
+      puts "#{@player.name}... #{@question}"
+      @attempt = gets.chomp
+
+      if @attempt == @awnser
+        puts "you're damb right it is!"
+        @turn += 1
+      else
+        puts "no..."
+        @player.life_points -= 1
+        puts "#{@player.name} has #{@player.life_points} life points left..."
+        @turn += 1
+      end
+    end
+    puts "#{@player.name}... .  .  . you dead"
+    
+  end
 end  
 
 lets_play = Game.new
+lets_play.setup
+
+
